@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}MTQQC-receive{% endblock %}
+
+{% block head %}<link rel="stylesheet" href="{{ url_for('static',filename='css/receive.css') }}">{% endblock %}
+
+{% block body %}
+    <div class="row" style="margin-top: 20px;">
+            <div class="col"></div>
+            <div class="col-10">
+                <h1 style="text-align: center;">消息接收</h1>
+				<small id="publicHelp" class="form-text text-muted">订阅的主题为</small>
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <input type="text" name="topic" class="form-control" placeholder="请输入订阅主题" >
+                    </div>
+                    <div class="form-group" style="text-align: justify">
+                        <button class="btn btn-primary" id = 'subscribe'>开始接收</button>
+                    </div>
+                </form>
+                <ul class="message-ul">
+{#                    {% for message in messages %}#}
+{#                    <li>#}
+{#                        <div class="side-message">#}
+{#                            <img class="side-message-avatar" src="./static/images/avatar.jpg" alt="">#}
+{#                        </div>#}
+{#                        <div class="message-main">#}
+{#                            <div class="nessage-name"><a href="#">{{message.name}}</a></div>#}
+{#                            <div class="message-topic">消息主题 : {{message.topic}}</div>#}
+{#							<div class="message-title">消息标题 : {{ message.title }}</div>#}
+{#                            <div class="message-author">消息发送者 : {{ message.author }}</div>#}
+{#                            <div class="message-content">消息内容 : {{ message.content }}</div>#}
+{#							<span class="message-create_time">消息发送时间 : {{ message.create_time }}</span>#}
+{#                        </div>#}
+{#                    </li>#}
+{#                    {% endfor %}#}
+                <li>
+                    <div class="side-message">
+                        <img class="side-message-avatar" src="{{ url_for('static',filename='images/avatar.jpg') }}" alt="">
+                    </div>
+                    <div class="message-main">
+                        <div class="nessage-name"><a href="#"></a></div>
+                        <div class="message-topic">消息主题 : </div>
+                        <div class="message-title">消息标题 : </div>
+                        <div class="message-author">消息发送者 : </div>
+                        <div class="message-content">消息内容 : </div>
+                        <span class="message-create_time">消息发送时间 : </span>
+                    </div>
+                </li>
+            </ul>
+{#				    <textarea name="content" class="form-control" rows="10" placeholder="收到的内容"></textarea>#}
+            </div>
+            <div class="col"></div>
+        </div>
+{% endblock %}

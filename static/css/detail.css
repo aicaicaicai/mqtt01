@@ -1,0 +1,43 @@
+.device-name{
+    text-align: center;
+}
+
+.device-info{
+    text-align: center;
+}
+
+.message-group-title{
+    margin-top: 20px;
+}
+
+.form-container{
+    width: 500px;
+    margin-top: 10px;
+    text-align: right;
+}
+
+.message-group{
+    list-style: none;
+    padding-left: 0;
+}
+
+.message-group li{
+    border-bottom:1px solid #eee;
+    padding: 10px 0;
+}
+
+.message-group li{
+    height: 40px;
+    line-height:40px;
+    color: #272727;
+    font-size: 20px;
+}
+
+.create-time{
+    float: right;
+	margin-right: 20px;
+}
+.message-content{
+    margin-top: 5px;
+	margin-left: 20px;
+}
