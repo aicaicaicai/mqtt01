@@ -4,11 +4,11 @@
 SECRET_KEY = "mdofckc%emqxflask;ok"
 
 # 数据库配置信息
-HOSTNAME = '192.168.31.145'
+HOSTNAME = '127.0.0.1'
 PORT = '3306'
 DATABASE = 'mqttc01'
 USERNAME = 'root'
-PASSWORD = 'cccc'
+PASSWORD = 'Syj123456'
 DB_URI = 'mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8mb4'.format(USERNAME, PASSWORD, HOSTNAME, PORT, DATABASE)
 SQLALCHEMY_DATABASE_URI = DB_URI
 
@@ -22,7 +22,7 @@ MAIL_PASSWORD = "IKG5Fp6QiGmauehM"
 MAIL_DEFAULT_SENDER = "ckc888@88.com"
 
 # mqtt配置
-MQTT_HOST = "192.168.31.145"
+MQTT_HOST = "127.0.0.1"
 MQTT_PORT = 1883
 MQTT_USERNAME = "0"
 MQTT_PASSWORD = "public"
@@ -35,5 +35,5 @@ PROCESS_NUM = 10
 
 
 # EMQX配置
-# API Key = 5b878cd84c3749e0
-# Secret Key = lI01cUNISWpFN9BO9CuaJ0xrU3NPCwAW4mNHQtqMejDDL
+# API Key =
+# Secret Key =
