@@ -34,12 +34,12 @@ class DeviceModel(db.Model):
     __tablename__ = 'device'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # factory = db.Column(db.Integer, nullable=False)
-    type = db.Column(db.Integer, nullable=True)  # 设备类型
+    type = db.Column(db.String(50), nullable=True)  # 设备类型
     name = db.Column(db.String(50), nullable=True, unique=True)  # 设备名称
-    device_model = db.Column(db.String(50), nullable=True)  # 设备型号
-    device_sn = db.Column(db.String(50), nullable=True)  # 设备序列号
-    device_ip = db.Column(db.String(50), nullable=True)  # 设备IP
-    device_port = db.Column(db.Integer, nullable=True)  # 设备端口
+    # device_model = db.Column(db.String(50), nullable=True)  # 设备型号
+    # device_sn = db.Column(db.String(50), nullable=True)  # 设备序列号
+    # device_ip = db.Column(db.String(50), nullable=True)  # 设备IP
+    # device_port = db.Column(db.Integer, nullable=True)  # 设备端口
     description = db.Column(db.Text, nullable=True)  # 设备描述
     is_online = db.Column(db.Boolean, default=0)  # 0:离线 1：在线
     is_error = db.Column(db.Boolean, default=0)  # 0:正常 1：异常
