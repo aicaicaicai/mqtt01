@@ -49,7 +49,8 @@ def public_message():
 @login_require
 def control_device():
     if request.method == 'GET':
-        return render_template('control.html')
+        factorys = FactoryModel.query.all()
+        return render_template('control.html', factorys=factorys)
     else:
         form = ControlForm(request.form)
         if form.validate():
