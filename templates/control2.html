@@ -10,15 +10,10 @@
     <div class="col-10">
         <h1 style="text-align: center;">输入操作顺序</h1>
         <form method="post">
-        <small id="deviceHelp" class="form-text text-muted">设备所在工厂:</small>
-                <div class="form-group">
-				<input class="form-control" list="sites" name="factoryName" id="site" placeholder="请选择设备所在工厂">
-				<datalist id="sites">
-				    {% for factory in factorys %}
-                        <option value={{ factory.name }}>
-                    {% endfor %}
-				</datalist>
-                </div>
+        <small id="publicHelp" class="form-text text-muted">输入工厂ID：将按照登录用户确定所在工厂</small>
+            <div class="form-group">
+                <input type="text" name="factory_id" class="form-control" placeholder="请输入工厂ID">
+            </div>
         <small id="publicHelp" class="form-text text-muted">输入设备ID用空格分隔</small>
             <div class="form-group">
                 <input type="text" name="control" class="form-control" placeholder="请输入操作顺序">

@@ -16,9 +16,13 @@
                         </div>
                         <div class="device-main">
                             <div class="device-name"><a href="#">{{device.name}}</a></div>
+                            <div class="device-message">设备ID : {{ device.id }}</div>
                             <div class="device-message">设备所属工厂 : {{ device.factory.name }}</div>
+                            <div class="device-message">设备类型 : {{ device.type }}</div>
                             <div class="device-status">在线状态 : {% if device.is_online%}在线{% else %}离线{% endif %}</div>
 							<div class="device-message">开机状态 : {% if device.now_status%}开机{% else %}关机{% endif %}</div>
+                            <div class="device-message">设备创建人 : {{ device.maker.username }}</div>
+                            <div class="device-message">设备创建时间 : {{ device.create_time }}</div>
 							<span class="update-time">设备状态更新时间 : {{ device.update_time }}</span>
                         </div>
                     </li>

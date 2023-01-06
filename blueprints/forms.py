@@ -58,18 +58,16 @@ class LoginForm(wtforms.Form):
 
 
 class DeviceForm(wtforms.Form):
-    name = wtforms.StringField(
-        validators=[Length(2, 40, message='请输入正确的设备名称'), InputRequired(message='设备名称不能为空')])
-    type = wtforms.IntegerField(validators=[InputRequired(message='设备类型不能为空')])
-    device_model = wtforms.StringField(
-        validators=[Length(2, 40, message='请输入正确的设备型号'), InputRequired(message='设备型号不能为空')])
-    device_sn = wtforms.StringField(
-        validators=[Length(2, 40, message='请输入正确的设备序列号'), InputRequired(message='设备序列号不能为空')])
-    device_ip = wtforms.StringField(
-        validators=[Length(2, 40, message='请输入正确的设备IP'), InputRequired(message='设备IP不能为空')])
-    device_port = wtforms.IntegerField(validators=[InputRequired(message='设备端口不能为空')])
-    description = wtforms.StringField(validators=[Length(min=2, message='请输入正确的设备备注'), InputRequired(message='设备备注不能为空')])
-    status = wtforms.IntegerField(validators=[InputRequired(message='设备状态不能为空')])
+    name = wtforms.StringField(validators=[Length(2, 40, message='请输入正确的设备名称'), InputRequired(message='设备名称不能为空')])
+    type = wtforms.StringField(validators=[Length(2, 40, message='请输入正确的设备类型'), InputRequired(message='设备类型不能为空')])
+    # device_model = wtforms.StringField(validators=[Length(2, 40, message='请输入正确的设备型号'), InputRequired(message='设备型号不能为空')])
+    # device_sn = wtforms.StringField(
+    #     validators=[Length(2, 40, message='请输入正确的设备序列号'), InputRequired(message='设备序列号不能为空')])
+    # device_ip = wtforms.StringField(
+    #     validators=[Length(2, 40, message='请输入正确的设备IP'), InputRequired(message='设备IP不能为空')])
+    # device_port = wtforms.IntegerField(validators=[InputRequired(message='设备端口不能为空')])
+    description = wtforms.StringField(validators=[Length(min=2, message='请输入正确的设备描述'), InputRequired(message='设备描述不能为空')])
+    # status = wtforms.IntegerField(validators=[InputRequired(message='设备状态不能为空')])
 
 
 class MessageForm(wtforms.Form):
@@ -77,8 +75,12 @@ class MessageForm(wtforms.Form):
     content = wtforms.StringField(
         validators=[Length(min=2, message='请输入正确的消息内容'), InputRequired(message='消息内容不能为空')])
 
+class FactoryForm(wtforms.Form):
+    name = wtforms.StringField(validators=[Length(min=2, max=40, message='请输入正确的厂商名称'), InputRequired(message='厂商名称不能为空')])
+    address = wtforms.StringField(validators=[Length(min=2, max=40, message='请输入正确的厂商地址'), InputRequired(message='厂商地址不能为空')])
+    description = wtforms.StringField(validators=[Length(min=2, message='请输入正确的厂商描述'), InputRequired(message='厂商描述不能为空')])
 
 class ControlForm(wtforms.Form):
-    factory_id = wtforms.IntegerField(validators=[InputRequired(message='工厂ID不能为空')])
+    factoryName = wtforms.StringField(validators=[Length(min=2, message='请选择设备所在的工厂名'), InputRequired(message='请选择设备所在的工厂名')])
     control = wtforms.StringField(validators=[Length(min=1, message='请输入正确的控制指令'), InputRequired(message='控制指令不能为空')])
     opt = wtforms.IntegerField(validators=[InputRequired(message='操作类型不能为空')])

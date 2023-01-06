@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}MTQQC-device{% endblock %}
+
+{% block head %}
+    <script src="{{ url_for('static', filename='jquery/jquery.3.6.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/deviceInfo.js') }}"></script>
+{% endblock %}
+
+{% block opt %}
+    <div class="row" style="margin-top: 37px;">
+     <div class="btn-group btn-group-justified" role="group" aria-label="...">
+		  <div class="btn-group" role="group">
+		    <a class="btn btn-outline-primary" href="{{ url_for('ps.device_add') }}">添加设备</a>
+		  </div>
+		  <div class="btn-group" role="group">
+		    <a class="btn btn-outline-primary" href="{{ url_for('ps.device_update') }}">更新设备</a>
+		  </div>
+		  <div class="btn-group" role="group">
+		    <a class="btn btn-primary" href="{{ url_for('ps.device_delete') }}">删除设备</a>
+		  </div>
+		</div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="row" style="margin-top: 37px;">
+    <div class="col-10">
+            <form method="post">
+            <div class="form-group">
+                <small id="deviceHelp" class="form-text text-muted">待删除设备名:</small>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="original_name" placeholder="请输入当前设备名">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="deviceInfo-btn">查询设备信息</button>
+                    </div>
+                </div>
+            </div>
+             <small id="deviceHelp" class="form-text text-muted">设备所在工厂:</small>
+                <div class="form-group">
+                    <input type="text" name="factoryName" class="form-control" disabled>
+                </div>
+            <small id="deviceHelp" class="form-text text-muted">设备ID:</small>
+                <div class="form-group">
+                    <input type="text" name="id" class="form-control" disabled>
+                </div>
+            <small id="deviceHelp" class="form-text text-muted">设备名:</small>
+                <div class="form-group">
+                    <input type="text" name="name" class="form-control" disabled>
+                </div>
+            <small id="deviceHelp" class="form-text text-muted">设备类型:</small>
+                <div class="form-group">
+                    <input type="text" name="type" class="form-control" disabled>
+                </div>
+            <small id="deviceHelp" class="form-text text-muted">设备描述:</small>
+                <div class="form-group">
+                    <input type="text" name="description" class="form-control" disabled>
+                </div>
+            <small id="deviceHelp" class="form-text text-muted">设备创建人:</small>
+                <div class="form-group">
+                    <input type="text" name="maker_name" class="form-control" disabled>
+                </div>
+                <div class="form-group" style="text-align: right;">
+                    <button class="btn btn-primary">删除</button>
+                </div>
+            </form>
+    </div>
+    </div>
+{% endblock %}

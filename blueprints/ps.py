@@ -1,8 +1,7 @@
-# 消息发布模块
 from flask import Blueprint, render_template, request, redirect, url_for, g
 
 from exts import db
-from .forms import DeviceForm, MessageForm, ControlForm
+from .forms import DeviceForm, MessageForm, ControlForm,FactoryForm
 from models import DeviceModel, MessageModel, FactoryModel
 from decorators import login_require
 from .mqtt_public import MqttPublic
@@ -54,15 +53,16 @@ def control_device():
     else:
         form = ControlForm(request.form)
         if form.validate():
-            factory_id = form.factory_id.data
+            factoryName = form.factoryName.data
             control = form.control.data
             opt = form.opt.data
             # 获取操作设备列表
             controlList = control.split(' ')
             # 验证工厂ID是否存在
-            factory = FactoryModel.query.filter(FactoryModel.id == factory_id).first()
+            factory = FactoryModel.query.filter(FactoryModel.name == factoryName).first()
             flag = 0
             if factory:
+                factory_id = factory.id
                 # 验证设备是否存在
                 for device in controlList:
                     device = DeviceModel.query.filter(DeviceModel.id == device).first()
@@ -85,6 +85,204 @@ def control_device():
         else:
             print(form.errors)
             return redirect(url_for("ps.control_device"))
+
+# 添加设备
+@bp.route('/ps/device/add', methods=['GET', 'POST'])
+@login_require
+def device_add():
+    if request.method == 'GET':
+        # 获取工厂列表
+        factorys = FactoryModel.query.all()
+
+        return render_template('device_add.html', factorys=factorys)
+    else:
+        form = DeviceForm(request.form)
+        factory_name = request.form.get('factory_name')
+        # form 包含的信息有：type,name,description,factory_name,maker_id
+        # maker_id 为当前用户的id: g.user.id
+        if form.validate():
+            device_name = form.name.data
+            # 验证设备是否存在
+            device = DeviceModel.query.filter(DeviceModel.name == device_name).first()
+            if device:
+                return '设备已存在'
+            else:
+                # 验证工厂是否存在
+                factory = FactoryModel.query.filter(FactoryModel.name == factory_name).first()
+                if factory:
+                    # 添加设备
+                    device = DeviceModel(name=device_name, type=form.type.data, description=form.description.data, factory_id=factory.id, maker_id=g.user.id)
+                    db.session.add(device)
+                    db.session.commit()
+                    return redirect(url_for("ps.device_add"))
+                else:
+                    return '工厂不存在'
+        else:
+            print(form.errors)
+            return redirect(url_for("ps.device_add"))
+
+# 更新设备
+@bp.route('/ps/device/update', methods=['GET', 'POST'])
+@login_require
+def device_update():
+    if request.method == 'GET':
+        # 获取工厂列表
+        factorys = FactoryModel.query.all()
+        return render_template('device_update.html', factorys=factorys)
+    else:
+        # 获取工厂名称
+        factory_name = request.form.get('factoryName')
+        # 获取工厂ID
+        factory = FactoryModel.query.filter(FactoryModel.name == factory_name).first()
+        # 获取设备在线状态
+        online = request.form.get('is_online')
+        if online == '在线':
+            is_online = 1
+        else:
+            is_online = 0
+        # 获取设备开机状态
+        status = request.form.get('now_status')
+        if status == '开机':
+            now_status = 1
+        else:
+            now_status = 0
+        # 验证设备是否存在
+        device_name = request.form.get('original_name')
+        device = DeviceModel.query.filter(DeviceModel.name == device_name).first()
+        if device:
+            # 验证form数据
+            form = DeviceForm(request.form)
+            if form.validate():
+                # 验证是否修改设备名
+                if device_name == form.name.data:
+                    # 更新设备信息
+                    device.type = form.type.data
+                    device.description = form.description.data
+                    device.factory_id = factory.id
+                    device.is_online = is_online
+                    device.now_status = now_status
+                    db.session.commit()
+                    return redirect(url_for("ps.device_update"))
+                else:
+                    # 验证新设备名是否存在
+                    new_device = DeviceModel.query.filter(DeviceModel.name == form.name.data).first()
+                    if new_device:
+                        return '设备已存在'
+                    else:
+                        # 更新设备信息
+                        device.name = form.name.data
+                        device.type = form.type.data
+                        device.description = form.description.data
+                        device.factory_id = factory.id
+                        device.is_online = is_online
+                        device.now_status = now_status
+                        db.session.commit()
+                        return redirect(url_for("ps.device_update"))
+            else:
+                print(form.errors)
+                return redirect(url_for("ps.device_update"))
+        else:
+            return '设备不存在'
+
+# 删除设备
+@bp.route('/ps/device/delete', methods=['GET', 'POST'])
+@login_require
+def device_delete():
+    if request.method == 'GET':
+        return render_template('device_delete.html')
+    else:
+        # 获取设备名称
+        device_name = request.form.get('original_name')
+        # 验证设备是否存在
+        device = DeviceModel.query.filter(DeviceModel.name == device_name).first()
+        if device:
+            # 删除设备
+            db.session.delete(device)
+            db.session.commit()
+            return redirect(url_for("ps.device_delete"))
+        else:
+            return '设备不存在'
+
+# 添加工厂
+@bp.route('/ps/factory/add', methods=['GET', 'POST'])
+@login_require
+def factory_add():
+    if request.method == 'GET':
+        return render_template('factory_add.html')
+    else:
+        # form 包含的信息有：name,address,description
+        form = FactoryForm(request.form)
+        if form.validate():
+            name = form.name.data
+            # 验证工厂名称是否存在
+            factory = FactoryModel.query.filter(FactoryModel.name == name).first()
+            if factory:
+                return '工厂已存在'
+            else:
+                # 添加工厂
+                factory = FactoryModel(name=name, address=form.address.data, description=form.description.data)
+                db.session.add(factory)
+                db.session.commit()
+                return redirect(url_for("ps.factory_add"))
+
+# 更新工厂
+@bp.route('/ps/factory/update', methods=['GET', 'POST'])
+@login_require
+def factory_update():
+    if request.method == 'GET':
+        return render_template('factory_update.html')
+    else:
+        # form 包含的信息有：original_name,name,address,description
+        # 验证工厂名称是否存在
+        name = request.form.get('original_name')
+        factory = FactoryModel.query.filter(FactoryModel.name == name).first()
+        if factory:
+            # 验证form数据
+            form = FactoryForm(request.form)
+            if form.validate():
+
+                # 验证是否修改工厂名
+                if name == form.name.data:
+                    # 更新工厂信息
+                    factory.address = form.address.data
+                    factory.description = form.description.data
+                    db.session.commit()
+                    return redirect(url_for("ps.factory_update"))
+                else:
+                    # 验证新工厂名是否存在
+                    new_factory = FactoryModel.query.filter(FactoryModel.name == form.name.data).first()
+                    if new_factory:
+                        return '工厂已存在'
+                    else:
+                        # 更新工厂信息
+                        factory.name = form.name.data
+                        factory.address = form.address.data
+                        factory.description = form.description.data
+                        db.session.commit()
+                        return redirect(url_for("ps.factory_update"))
+            else:
+                print(form.errors)
+                return redirect(url_for("ps.factory_update"))
+        else:
+            return '工厂不存在'
+
+# 删除工厂
+@bp.route('/ps/factory/delete', methods=['GET', 'POST'])
+@login_require
+def factory_delete():
+    if request.method == 'GET':
+        return render_template('factory_delete.html')
+    else:
+        # form 包含的信息有：name
+        name = request.form.get('original_name')
+        factory = FactoryModel.query.filter(FactoryModel.name == name).first()
+        if factory:
+            # 删除工厂
+            db.session.delete(factory)
+            db.session.commit()
+            return redirect(url_for("ps.factory_delete"))
+        else:
+            return '工厂不存在'
 
 # # 测试
 # @bp.route('/ps/test', methods=['POST'])
