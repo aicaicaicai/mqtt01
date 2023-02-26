@@ -87,6 +87,32 @@ def control_device():
             print(form.errors)
             return redirect(url_for("ps.control_device"))
 
+# 控制设备顺序s
+@bp.route('/ps/controls/', methods=['GET', 'POST'])
+@login_require
+def control_devices():
+    if request.method == 'GET':
+        devicesNum = request.args.get('devicesNum')
+        # if devicesNum:
+        #     return render_template('controls.html', devicesNum=devicesNum)
+        # else:
+        #     return render_template('controls.html')
+        if devicesNum and devicesNum.isdigit():
+
+            # 获取所有设备
+            devices = DeviceModel.query.all()
+            return render_template('controls.html', devicesNum=int(devicesNum), devices=devices)
+        else:
+            return render_template('controls.html', devicesNum=None)
+        # return render_template('controls.html', devicesNum=devicesNum)
+
+    else:
+        # # 输入验证
+        # form = ControlsForm(request.form)
+        # if form.validate():
+        #     return control_devices2(form.devicesNum.data)
+        return 'OK'
+
 # 添加设备
 @bp.route('/ps/device/add', methods=['GET', 'POST'])
 @login_require
@@ -284,6 +310,14 @@ def factory_delete():
             return redirect(url_for("ps.factory_delete"))
         else:
             return '工厂不存在'
+
+# 历史消息页
+@bp.route('/ps/message', methods=['GET'])
+@login_require
+def message_display():
+    # 获取消息
+    messages = MessageModel.query.order_by("create_time").all()
+    return render_template('message.html',messages=messages)
 
 # # 测试
 # @bp.route('/ps/test', methods=['POST'])

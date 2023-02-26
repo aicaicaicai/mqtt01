@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}MTQQC-home{% endblock %}
+
+{% block head %}<link rel="stylesheet" href="{{ url_for('static',filename='css/message.css') }}">{% endblock %}
+
+{% block body %}
+<div class="row" style="margin-top: 20px;">
+            <div class="col"></div>
+            <div class="col-10">
+                <ul class="message-ul">
+                    {% for message in messages %}
+                    <li>
+                        <div class="side-message">
+                            <img class="side-message-avatar" src="../static/images/avatar.jpg" alt="">
+                        </div>
+                        <div class="messgae-main">
+                            <div class="message-topic">消息主题 : {{ message.topic }}</div>
+                            <div class="message-content">消息内容 : {{ message.content }}</div>
+                            <div class="message-message">发送时间 : {{ message.create_time }}</div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col"></div>
+        </div>
+{% endblock %}
