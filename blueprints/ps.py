@@ -6,6 +6,7 @@ from models import DeviceModel, MessageModel, FactoryModel
 from decorators import login_require
 from .mqtt_public import MqttPublic
 from .make_control import make_control
+from .make_controls import make_controls
 
 import json
 
@@ -107,11 +108,38 @@ def control_devices():
         # return render_template('controls.html', devicesNum=devicesNum)
 
     else:
-        # # 输入验证
+        form = request.form.to_dict()
+        # 设备数量
+        devicesNum = int(form.get('devicesNum'))
+
+        # # # 输入验证
         # form = ControlsForm(request.form)
+        # # 设备数量
+        # devicesNum = form.devicesNum.data
+        # 设备名称及操作
+
+        devicesNameList = []
+        devicesIdList = []
+        devicesOptList = []
+
+        for i in range(1, devicesNum + 1):
+            deviceName = form.get("deviceName" + str(i))
+            # 获取设备ID
+            device = DeviceModel.query.filter(DeviceModel.name == deviceName).first()
+            device_id = device.id
+            # 设备操作
+            deviceOpt = form.get("opt" + str(i))
+            devicesNameList.append(deviceName)
+            devicesOptList.append(deviceOpt)
+            devicesIdList.append(device_id)
+
+        # 执行操作
+        make_controls(devicesNameList, devicesOptList, devicesIdList)
+        return render_template('controls.html', devicesNum=None)
+
         # if form.validate():
         #     return control_devices2(form.devicesNum.data)
-        return 'OK'
+        # return 'OK'
 
 # 添加设备
 @bp.route('/ps/device/add', methods=['GET', 'POST'])
